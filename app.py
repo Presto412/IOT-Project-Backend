@@ -1,32 +1,24 @@
+"""app"""
+import test
 
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, request
 
-from scrapers import timetable
-from utilities import store_details
+import predict_soil
 
 app = Flask(__name__)
 
-@app.route("/")
-def main():
-    return render_template('index.html')
 
-
-@app.route("/register", methods=['POST'])
-def register():
-    reg_no = request.form["regno"]
-    password = request.form["password"]
-    name = request.form["name"]
-    email = request.form["email"]
-    mobile = request.form["mobile"]
-    fetched_tt = timetable.get_timetable(reg_no, password)
-    if fetched_tt == 2:
-        return "exists"
-    elif fetched_tt == 0:
-        return "Incorrect"
-    else:
-        store_details.store(reg_no, name, email, mobile)
-        store_details.store_time_table(fetched_tt, reg_no)
-        return "success"
+@app.route("/update", methods=['GET'])
+def update():
+    test.test()
+    temp = request.args.get('field1')
+    humidity = request.args.get('field2')
+    moisture = request.args.get('field3')
+    prediction = predict_soil.run((temp, humidity, moisture))
+    with open("Predictions.txt", "a") as f:
+        f.write("Prediction Category:" + prediction + '\n')
+    return jsonify({"Success": True, "Prediciton": prediction})
+    # return 'Done'
 
 if __name__ == "__main__":
     app.run()
