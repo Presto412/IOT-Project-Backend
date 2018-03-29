@@ -18,6 +18,6 @@ def test():
         data[index].append(i)
         index += 1
 
-    with open("newset.csv", 'w', newline='') as f:
+    with open("newset.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerows(data)
