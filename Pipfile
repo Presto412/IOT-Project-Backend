@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+numpy = "==1.12.1"
+flask = "==0.12.2"
+scikit-learn = "==0.19.1"
+gunicorn = ">=19.0.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
