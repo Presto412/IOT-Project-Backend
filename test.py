@@ -10,7 +10,7 @@ def test():
         for row in reader: # each row is a list
             results.append(row)
 
-    kmeans = KMeans(n_clusters=5, random_state=0).fit(results)
+    kmeans = KMeans(n_clusters=2, random_state=0).fit(results)
 
     data = results
     index = 0
