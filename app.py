@@ -1,5 +1,6 @@
 """app"""
 import test
+import thingspeak_data
 
 from flask import Flask, jsonify, request, Response
 
@@ -10,17 +11,16 @@ app = Flask(__name__)
 
 @app.route("/update", methods=['GET'])
 def update():
-    temp = request.args.get('field1')
-    humidity = request.args.get('field2')
-    moisture = request.args.get('field3')
+    data = thingspeak_data.get_data()
+    temp = data['field1']
+    humidity = data['field2']
+    moisture = data['field3']
     # self learning
-    with open("soil_dataset.csv", "a") as f:
-        f.write('%s,%s,%s,%s\n' % (temp, -1, humidity, moisture))
     test.test()
     predict_soil.train()
     prediction = predict_soil.predict((temp, -1, humidity, moisture))
-    with open("Predictions.txt", "a") as f:
-        f.write("Prediction Category:" + prediction + '\n')
+    with open("soil_dataset.csv", "a") as f:
+        f.write('%s,%s,%s,%s\n' % (temp, -1, humidity, moisture))
     return jsonify({"Success": True, "Prediciton": prediction})
 
 
