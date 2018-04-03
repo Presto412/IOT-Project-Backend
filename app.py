@@ -19,9 +19,13 @@ def update():
     test.test()
     predict_soil.train()
     prediction = predict_soil.predict((temp, -1, humidity, moisture))
+    if prediction == 0:
+        val = "Irrigation required"
+    else:
+        val = "Not required"
     with open("soil_dataset.csv", "a") as f:
         f.write('%s,%s,%s,%s\n' % (temp, -1, humidity, moisture))
-    return jsonify({"Success": True, "Prediciton": prediction})
+    return jsonify({"Success": True, "Prediciton": val})
 
 
 @app.route("/getclusterCSV", methods=["GET"])
@@ -32,7 +36,9 @@ def get_data():
     return Response(
         csv,
         mimetype="text/csv",
-        headers={"Content-disposition": "attachment; filename=clustered_data.csv"})
+        headers={
+            "Content-disposition": "attachment; filename=clustered_data.csv"
+        })
 
 
 if __name__ == "__main__":
